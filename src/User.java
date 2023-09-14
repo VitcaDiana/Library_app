@@ -1,10 +1,10 @@
 public class User {
     private String name;
-    private Library getLibrary;
+    private Library library;
 
     public User(String name, Library library) {
         this.name = name;
-        this.getLibrary = library;
+        this.library = library;
     }
 
     public String getName() {
@@ -16,10 +16,10 @@ public class User {
     }
 
     public Library getLibrary() {
-        return getLibrary;
+        return library;
     }
 
-    public void setGetLibrary(Library getLibrary) {
-        this.getLibrary = getLibrary;
+    public void setLibrary(Library library) {
+        this.library = library;
     }
 }

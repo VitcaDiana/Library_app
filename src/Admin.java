@@ -6,7 +6,7 @@ public class Admin extends User {
     }
 
     public boolean addBook(Book newBook) {
-        Book bookIsInList = getLibrary().findBook(newBook.getISBNCode());
+        Book bookIsInList = getLibrary().findBookByISBNCode(newBook.getISBNCode());
         //verific daca cartea exista in biblioteca
         if (bookIsInList != null) {
             //crestem nr de copii
@@ -23,8 +23,16 @@ public class Admin extends User {
 
     }
 
-    public boolean deleteBook(String ISBNCode) throws Exception {
+    public void deleteBook(String ISBNCode) throws Exception {
         //verific daca cartea este in lista
+        int foundIndex = getLibrary().findIndexOfBook(ISBNCode);
+        if (foundIndex == -1) {
+            throw new Exception("book does not exist");
+        }
+        //mutam elementele de dupa cartea gasita cu o pozitie la stanga
+        getLibrary().deleteBook(foundIndex);
+
+
         if (getLibrary().isBookInList(ISBNCode)) {
             int index = getLibrary().findIndexOfBook(ISBNCode);
             //mutam elementele de dupa cartea gasita cu o pozitie la stanga
@@ -33,7 +41,6 @@ public class Admin extends User {
             }
             //actualizam nr de carti
             getLibrary().setNumberOfBooks(getLibrary().getNumberOfBooks() - 1);
-            return true;
         } else {
             throw new Exception("Cartea nu există în bibliotecă.");
         }
@@ -42,18 +49,34 @@ public class Admin extends User {
 
     public void deleteBook(String ISBNCode, int numberOfCopiesToDelete) throws Exception {
         //verific daca cartea este in lista
-        if (getLibrary().isBookInList(ISBNCode)) {
-            Book book = getLibrary().findBook(ISBNCode);
-            int remainingCopies = book.getTotalNumberOfCopies() - numberOfCopiesToDelete;
 
-            if (remainingCopies >= 0) {
-                book.setTotalNumberOfCopies(remainingCopies);
-            } else {
-                throw new Exception("Nu există suficiente copii pentru a șterge.");
-            }
-        }else{
-                throw new Exception("Cartea nu există în bibliotecă.");
-            }
+
+        //daca cartea nu exista in bilioteca, arunc exceptie
+        //updatez numarul de copii al cartii din biblioteca
+
+        Book book = getLibrary().findBookByISBNCode(ISBNCode);
+        if (book == null){
+            throw  new Exception("cartea nu exista");
+        }
+        if (book.getTotalNumberOfCopies()<=numberOfCopiesToDelete){
+            throw  new Exception("you cannot delete this amount of cpies");
+        }
+        book.setTotalNumberOfCopies(book.getTotalNumberOfCopies()-numberOfCopiesToDelete);
+
+
+
+//        if (getLibrary().isBookInList(ISBNCode)) {
+//            Book book = getLibrary().findBookByISBNCode(ISBNCode);
+//            int remainingCopies = book.getTotalNumberOfCopies() - numberOfCopiesToDelete;
+//
+//            if (remainingCopies >= 0) {
+//                book.setTotalNumberOfCopies(remainingCopies);
+//            } else {
+//                throw new Exception("Nu există suficiente copii pentru a șterge.");
+//            }
+//        }else{
+//                throw new Exception("Cartea nu există în bibliotecă.");
+//            }
     }
 
 
@@ -64,7 +87,7 @@ public class Admin extends User {
     }
     public void listBookDetails(String ISBNCode) {
         if (getLibrary().isBookInList(ISBNCode)) {
-            Book book = getLibrary().findBook(ISBNCode);
+            Book book = getLibrary().findBookByISBNCode(ISBNCode);
             System.out.println(book.toString());
         } else {
             System.out.println("Cartea nu există în bibliotecă.");

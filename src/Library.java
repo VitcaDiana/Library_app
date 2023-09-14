@@ -33,6 +33,14 @@ public class Library {
         return false;
     }
 
+    public void deleteBook(int startIndex){
+        for (int i = startIndex; i < numberOfBooks - 1; i++) {
+            books[i] = books[i + 1];
+        }
+        //actualizam nr de carti
+        numberOfBooks--;
+    }
+
     public int findIndexOfBook(String ISBNCode) {
         //caut in lista de carti codul ISBN introdus iar daca il gasesc returnez pozitia la care l-am gasit
         for (int i = 0; i < numberOfBooks; i++) {
@@ -43,7 +51,7 @@ public class Library {
         return -1;
     }
 
-    public Book findBook(String ISBNCode) {
+    public Book findBookByISBNCode(String ISBNCode) {
         for (int i = 0; i < numberOfBooks; i++) {
             if (ISBNCode.equals(books[i].getISBNCode())) {
                 return books[i];

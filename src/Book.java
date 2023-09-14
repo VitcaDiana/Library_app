@@ -12,6 +12,10 @@ public class Book {
 
     }
 
+    public boolean isAvailable (){
+        return totalNumberOfCopies > borrowedNumberOfCopies;
+    }
+
     public String getTitle() {
         return title;
     }
